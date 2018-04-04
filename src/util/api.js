@@ -27,6 +27,10 @@ export function convertViews(data) {
     views.videoOverlay = { viewerUrl: data.video_overlay.viewer_url };
   }
 
+  if (data.mobile) {
+    console.log(data.mobile);
+    views.mobile = { viewerUrl: data.mobile.viewer_url };
+  }
   return views;
 }
 
