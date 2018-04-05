@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import './component.sass';
-import { EXTENSION_VIEWS, BROADCASTER_CONFIG, LIVE_CONFIG, CONFIGURATIONS } from '../constants/nav-items'
+import { EXTENSION_VIEWS, BROADCASTER_CONFIG, LIVE_CONFIG, CONFIGURATIONS, MOBILE_VIEW } from '../constants/nav-items'
 
 export class RigNav extends Component {
   openConfigurationsHandler = () => {
@@ -21,6 +21,9 @@ export class RigNav extends Component {
           <a
             className={this.props.selectedView === EXTENSION_VIEWS ? "top-nav-item top-nav-item__selected" : "top-nav-item"}
             onClick={this.props.viewerHandler}>Extension Views</a>
+          {this.props.mobileHandler && <a
+            className={this.props.selectedView === MOBILE_VIEW ? "top-nav-item top-nav-item__selected" : "top-nav-item"}
+            onClick={this.props.mobileHandler}>Mobile View</a> }
           <a
             className={this.props.selectedView === BROADCASTER_CONFIG ? "top-nav-item top-nav-item__selected" : "top-nav-item"}
             onClick={this.props.configHandler}>Broadcaster Config</a>

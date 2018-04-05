@@ -62,6 +62,12 @@ export class ExtensionView extends Component {
           width: PANEL_VIEW_DIMENSIONS.width,
         }
         break;
+      case ExtensionViewType.Mobile:
+        extensionProps.viewStyles = {
+          height: '600px',
+          width: '320px',
+        }
+        break;
       default:
         extensionProps.viewStyles = PANEL_VIEW_DIMENSIONS;
         break;

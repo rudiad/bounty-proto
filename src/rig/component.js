@@ -7,16 +7,17 @@ import { RigConfigurationsDialog } from '../rig-configurations-dialog';
 import { createExtensionObject } from '../util/extension';
 import { createSignedToken } from '../util/token';
 import { fetchManifest, fetchExtensionManifest } from '../util/api';
-import { EXTENSION_VIEWS, BROADCASTER_CONFIG, LIVE_CONFIG, CONFIGURATIONS } from '../constants/nav-items'
+import { EXTENSION_VIEWS, BROADCASTER_CONFIG, LIVE_CONFIG, CONFIGURATIONS, MOBILE_VIEW } from '../constants/nav-items'
 import { ViewerTypes } from '../constants/viewer-types';
-import { OverlaySizes } from '../constants/overlay_sizes';
+import { OverlaySizes } from '../constants/overlay-sizes';
 import { IdentityOptions } from '../constants/identity-options';
 import { RIG_ROLE } from '../constants/rig';
-const { ExtensionMode } = window['extension-coordinator'];
+const { ExtensionMode, ExtensionViewType } = window['extension-coordinator'];
 
 export class Rig extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       clientId: process.env.EXT_CLIENT_ID,
       secret: process.env.EXT_SECRET,
@@ -63,6 +64,21 @@ export class Rig extends Component {
       selectedView: EXTENSION_VIEWS,
       extension: {},
     });
+  }
+
+  mobileHandler = () => {
+    this.setState({
+      mode: ExtensionViewType.Mobile,
+      selectedView: MOBILE_VIEW,
+      extension: createExtensionObject(
+        this.state.manifest,
+        0,
+        ViewerTypes.Broadcaster,
+        false,
+        this.state.userName,
+        this.state.channelId,
+        this.state.secret),
+    })
   }
 
   configHandler = () => {
@@ -148,11 +164,15 @@ export class Rig extends Component {
   }
 
   render() {
+    if (this.state.manifest.views && this.state.manifest.views.mobile) {
+      console.log(this.state.manifest.views.mobile);
+    }
     return (
       <div>
         <RigNav
           ref="rigNav"
           selectedView={this.state.selectedView}
+          mobileHandler={ (this.state.manifest.views && this.state.manifest.views.mobile) ? this.mobileHandler : null }
           viewerHandler={this.viewerHandler}
           configHandler={this.configHandler}
           liveConfigHandler={this.liveConfigHandler}
