@@ -1,22 +1,30 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import './component.sass';
+import ReactDOM from 'react-dom';
+
 const { ExtensionPlatform, ExtensionViewType} = window['extension-coordinator'];
 
 const IFRAME_CLASS = 'extension-frame';
 const EXTENSION_FRAME_INIT_ACTION = 'extension-frame-init';
 
 export class ExtensionFrame extends Component {
+  constructor() {
+    super(...arguments);
+    this._boundOnFrameDoubleClick = this._onFrameDoubleClick.bind(this);
+  }
+
   componentDidMount() {
     if (this.iframe) {
       this.iframe.onload = this._extensionFrameInit;
+      this.iframe.contentWindow.addEventListener('dblclick', this._boundOnFrameDoubleClick);
     }
   }
 
   render() {
     return (
       <iframe
-        ref={this._bindIframeRef}
+      ref={this._bindIframeRef}
         src={process.env.PUBLIC_URL + '/extension-frame.html'}
         frameBorder={0}
         className={'rig-frame ' + IFRAME_CLASS}
@@ -29,7 +37,6 @@ export class ExtensionFrame extends Component {
   }
 
   _extensionFrameInit = () => {
-    console.log(this.props);
     const extension = {
       anchor: this.props.type,
       channelId: this.props.extension.channelId,
@@ -51,6 +58,7 @@ export class ExtensionFrame extends Component {
   _onIdentityLinked(isLinked) {}
 
   _onFrameDoubleClick(evt) {
+    console.log('double clickin')
     evt.preventDefault();
   }
 
