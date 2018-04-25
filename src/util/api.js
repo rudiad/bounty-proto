@@ -28,9 +28,20 @@ export function convertViews(data) {
   }
 
   if (data.mobile) {
-    console.log(data.mobile);
     views.mobile = { viewerUrl: data.mobile.viewer_url };
   }
+
+  if (data.component) {
+    views.component = {
+      aspectHeight: data.component.aspect_height,
+      aspectWidth: data.component.aspect_width,
+      size: data.component.size,
+      viewerUrl: data.component.viewer_url,
+      zoom: data.component.zoom,
+      zoomPixels: data.component.zoom_pixels,
+    };
+  }
+
   return views;
 }
 
