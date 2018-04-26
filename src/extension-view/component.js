@@ -7,8 +7,9 @@ import { ViewerTypes } from '../constants/viewer-types';
 import { CONFIG_VIEW_DIMENSIONS, CONFIG_VIEW_WRAPPER_DIMENSIONS, PANEL_VIEW_DIMENSIONS } from '../constants/view_sizes';
 import closeButton from '../img/close_icon.png';
 import { ExtensionComponentView } from '../extension-component-view';
+import { ExtensionMobileView } from '../extension-mobile-view/component';
 
-const { ExtensionAnchor, ExtensionMode, ExtensionViewType } = window['extension-coordinator'];
+const { ExtensionAnchor, ExtensionMode, ExtensionViewType, ExtensionPlaform } = window['extension-coordinator'];
 
 export class ExtensionView extends Component {
   constructor(props) {
@@ -64,12 +65,6 @@ export class ExtensionView extends Component {
           width: PANEL_VIEW_DIMENSIONS.width + 'px',
         }
         break;
-      case ExtensionViewType.Mobile:
-        extensionProps.viewStyles = {
-          height: '600px',
-          width: '320px',
-        }
-        break;
       default:
         extensionProps.viewStyles = PANEL_VIEW_DIMENSIONS;
         break;
@@ -109,7 +104,8 @@ export class ExtensionView extends Component {
               this.renderLinkedOrUnlinked() : null}
           </div>
         </div>
-        {this.props.type === ExtensionAnchor.Component ?
+
+        {this.props.type === ExtensionAnchor.Component &&
           <ExtensionComponentView
             id={`component-${this.props.id}`}
             className="view"
@@ -117,19 +113,30 @@ export class ExtensionView extends Component {
             extension={this.props.extension}
             overlaySize={this.props.overlaySize}
             position={this.props.position}
-          /> :
-          <div
+          />}
+
+        {this.props.type === ExtensionViewType.Mobile &&
+         <ExtensionMobileView
+            id={`mobile-${this.props.id}`}
             className="view"
-            style={extensionProps.viewStyles}>
-            <ExtensionFrame
-              className="view"
-              frameId={`frameid-${this.props.id}`}
-              extension={this.props.extension}
-              type={this.props.type}
-              mode={this.props.mode}
-            />
-          </div>
-        }
+            frameId={`frameid-${this.props.id}`}
+            extension={this.props.extension}
+            overlaySize={this.props.overlaySize}
+            position={this.props.position}
+          />}
+
+        {(this.props.type === ExtensionAnchor.Overlay || this.props.type === ExtensionAnchor.Panel) &&
+          <div
+          className="view"
+          style={extensionProps.viewStyles}>
+          <ExtensionFrame
+            className="view"
+            frameId={`frameid-${this.props.id}`}
+            extension={this.props.extension}
+            type={this.props.type}
+            mode={this.props.mode}
+          />
+        </div>}
       </div>
     );
   }

@@ -197,15 +197,11 @@ export class Rig extends Component {
   }
 
   render() {
-    if (this.state.manifest.views && this.state.manifest.views.mobile) {
-      console.log(this.state.manifest.views.mobile);
-    }
     return (
       <div>
         <RigNav
           ref="rigNav"
           selectedView={this.state.selectedView}
-          mobileHandler={ (this.state.manifest.views && this.state.manifest.views.mobile) ? this.mobileHandler : null }
           viewerHandler={this.viewerHandler}
           configHandler={this.configHandler}
           liveConfigHandler={this.liveConfigHandler}

@@ -21,9 +21,6 @@ export class RigNav extends Component {
           <a
             className={this.props.selectedView === EXTENSION_VIEWS ? "top-nav-item top-nav-item__selected" : "top-nav-item"}
             onClick={this.props.viewerHandler}>Extension Views</a>
-          {this.props.mobileHandler && <a
-            className={this.props.selectedView === MOBILE_VIEW ? "top-nav-item top-nav-item__selected" : "top-nav-item"}
-            onClick={this.props.mobileHandler}>Mobile View</a> }
           <a
             className={this.props.selectedView === BROADCASTER_CONFIG ? "top-nav-item top-nav-item__selected" : "top-nav-item"}
             onClick={this.props.configHandler}>Broadcaster Config</a>
