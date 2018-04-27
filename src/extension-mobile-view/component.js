@@ -5,27 +5,48 @@ const { ExtensionMode, ExtensionViewType, getComponentPositionFromView, getCompo
 
 export class ExtensionMobileView extends Component {
   computeFrameStyles() {
-    const height = Math.floor(this.props.overlaySize.height * 0.65);
-    const top = this.props.frameSize - height;
-    let viewStyles = {
-      position: 'absolute',
-      bottom: 0,
-      width: `${this.props.overlaySize.width}px`,
-      height: `${height}px`,
+    let frameStyles;
+
+    if (this.props.orientation === 'portrait') {
+      const height = Math.floor(this.props.overlaySize.height * 0.65);
+      frameStyles = {
+        width: `${this.props.overlaySize.width}px`,
+        height: `${height}px`,
+      }
+    } else {
+      const width = Math.floor(this.props.overlaySize.height * 0.65);
+      frameStyles = {
+        width: `${width}px`,
+        height: `${this.props.overlaySize.width}px`,
+      }
     }
 
+    frameStyles.position = 'absolute';
+    frameStyles.bottom = 0;
+    return frameStyles;
+  }
+  computeViewStyles() {
+    let viewStyles;
+    if (this.props.orientation === 'portrait') {
+      viewStyles = {
+        width: this.props.overlaySize.width + 'px',
+        height: this.props.overlaySize.height + 'px',
+      }
+    } else {
+      viewStyles = {
+        width: this.props.overlaySize.height + 'px',
+        height: this.props.overlaySize.width + 'px',
+      }
+    }
+
+    viewStyles.background = '#322F37';
     return viewStyles;
   }
-
   render() {
     return (
       <div
         className="view component-view"
-        style={{
-          background: 'repeating-linear-gradient(45deg, lightgrey, lightgrey 5px, grey 5px, grey 10px)',
-          width: this.props.overlaySize.width + 'px',
-          height: this.props.overlaySize.height + 'px',
-        }}>
+        style={this.computeViewStyles()}>
           <div style={this.computeFrameStyles()}>
           <ExtensionFrame
             className="view"
@@ -42,6 +63,7 @@ export class ExtensionMobileView extends Component {
 
 ExtensionMobileView.propTypes = {
   id: PropTypes.string.isRequired,
+  orientation: PropTypes.string.isRequired,
   extension: PropTypes.object.isRequired,
   frameSize: PropTypes.object.isRequired,
   position: PropTypes.object.isRequired,
