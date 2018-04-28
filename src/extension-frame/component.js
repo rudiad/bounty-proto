@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import './component.sass';
-import ReactDOM from 'react-dom';
 
 const { ExtensionPlatform, ExtensionViewType} = window['extension-coordinator'];
 

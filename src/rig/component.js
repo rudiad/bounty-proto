@@ -8,10 +8,11 @@ import { EditViewDialog } from '../edit-view-dialog';
 import { createExtensionObject } from '../util/extension';
 import { createSignedToken } from '../util/token';
 import { fetchManifest, fetchExtensionManifest } from '../util/api';
-import { EXTENSION_VIEWS, BROADCASTER_CONFIG, LIVE_CONFIG, CONFIGURATIONS, MOBILE_VIEW } from '../constants/nav-items'
+import { EXTENSION_VIEWS, BROADCASTER_CONFIG, LIVE_CONFIG, CONFIGURATIONS } from '../constants/nav-items'
 import { ViewerTypes } from '../constants/viewer-types';
 import { OverlaySizes } from '../constants/overlay-sizes';
 import { IdentityOptions } from '../constants/identity-options';
+import { MobileSizes } from '../constants/mobile';
 import { RIG_ROLE } from '../constants/rig';
 const { ExtensionMode, ExtensionViewType } = window['extension-coordinator'];
 
@@ -79,21 +80,6 @@ export class Rig extends Component {
       selectedView: EXTENSION_VIEWS,
       extension: {},
     });
-  }
-
-  mobileHandler = () => {
-    this.setState({
-      mode: ExtensionViewType.Mobile,
-      selectedView: MOBILE_VIEW,
-      extension: createExtensionObject(
-        this.state.manifest,
-        0,
-        ViewerTypes.Broadcaster,
-        false,
-        this.state.userName,
-        this.state.channelId,
-        this.state.secret),
-    })
   }
 
   configHandler = () => {
@@ -174,7 +160,8 @@ export class Rig extends Component {
       role: this.refs.extensionViewDialog.state.viewerType,
       x: this.refs.extensionViewDialog.state.x,
       y: this.refs.extensionViewDialog.state.y,
-      overlaySize: (this.refs.extensionViewDialog.state.overlaySize === 'Custom' ? {width: this.refs.extensionViewDialog.state.width, height: this.refs.extensionViewDialog.state.height} : OverlaySizes[this.refs.extensionViewDialog.state.overlaySize]),
+      orientation: this.refs.extensionViewDialog.state.orientation,
+      frameSize: (this.refs.extensionViewDialog.state.frameSize === 'Custom' ? {width: this.refs.extensionViewDialog.state.width, height: this.refs.extensionViewDialog.state.height} : OverlaySizes[this.refs.extensionViewDialog.state.frameSize]),
     });
     this._pushExtensionViews(extensionViews);
     this.closeExtensionViewDialog();
@@ -184,12 +171,24 @@ export class Rig extends Component {
     this._pushExtensionViews(this.state.extensionViews.filter(element => element.id !== id));
   }
 
-  editComponentViewPosition = (position) => {
+  editComponentViewPosition = (newViewState) => {
+    console.log(newViewState);
     const views = this._getExtensionViews();
     views.forEach(element => {
       if (element.id === this.state.idToEdit) {
-        element.x = position.x;
-        element.y = position.y;
+        let newFrameSize;
+        if (newViewState.frameSize === 'Custom') {
+          newFrameSize = newViewState.frameSize;
+        } else if (newViewState.type === ExtensionViewType.Mobile) {
+          newFrameSize = MobileSizes[newViewState.frameSize];
+        } else {
+          newFrameSize = OverlaySizes[newViewState.frameSize];
+        }
+
+        element.x = newViewState.x;
+        element.y = newViewState.y;
+        element.orientation = newViewState.orientation;
+        element.frameSize = newFrameSize;
       }
     });
     this._pushExtensionViews(views);

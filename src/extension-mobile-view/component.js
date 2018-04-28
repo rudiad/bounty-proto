@@ -2,28 +2,29 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { ExtensionFrame } from '../extension-frame';
 import { MobileOrientation } from '../constants/mobile';
-const { ExtensionMode, ExtensionViewType, getComponentPositionFromView, getComponentSizeFromView } = window['extension-coordinator'];
+const { ExtensionMode, ExtensionViewType} = window['extension-coordinator'];
 
 export class ExtensionMobileView extends Component {
   computeFrameStyles() {
     let frameStyles;
 
     if (this.props.orientation === MobileOrientation.Portrait) {
-      const height = Math.floor(this.props.overlaySize.height * 0.65);
+      const height = Math.floor(this.props.frameSize.height * 0.65);
       frameStyles = {
-        width: `${this.props.overlaySize.width}px`,
+        width: `${this.props.frameSize.width}px`,
         height: `${height}px`,
+        bottom: 0
       }
     } else {
-      const width = Math.floor(this.props.overlaySize.height * 0.28);
+      const width = Math.floor(this.props.frameSize.height * 0.28);
       frameStyles = {
         width: `${width}px`,
-        height: `${this.props.overlaySize.width}px`,
+        height: `${this.props.frameSize.width}px`,
+        right: 0
       }
     }
 
     frameStyles.position = 'absolute';
-    frameStyles.right = 0;
     return frameStyles;
   }
 
@@ -31,13 +32,13 @@ export class ExtensionMobileView extends Component {
     let viewStyles;
     if (this.props.orientation === MobileOrientation.Portrait) {
       viewStyles = {
-        width: this.props.overlaySize.width + 'px',
-        height: this.props.overlaySize.height + 'px',
+        width: this.props.frameSize.width + 'px',
+        height: this.props.frameSize.height + 'px',
       }
     } else {
       viewStyles = {
-        width: this.props.overlaySize.height + 'px',
-        height: this.props.overlaySize.width + 'px',
+        width: this.props.frameSize.height + 'px',
+        height: this.props.frameSize.width + 'px',
       }
     }
 
