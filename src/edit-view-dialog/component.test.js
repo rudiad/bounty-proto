@@ -1,15 +1,14 @@
 import { setupShallowTest } from '../tests/enzyme-util/shallow';
 import { EditViewDialog } from './component';
-import { ExtensionAnchors } from '../constants/extension-types';
 import { ViewerTypes } from '../constants/viewer-types';
 import { createViewsForTest } from '../tests/constants/extension';
-const { ExtensionAnchor } = window['extension-coordinator'];
+const { ExtensionViewType } = window['extension-coordinator'];
 
 describe('<EditViewDialog />', () => {
   const setupShallow = setupShallowTest(EditViewDialog, () => ({
     show: true,
     idToEdit: '1',
-    views: createViewsForTest(2, ExtensionAnchors[ExtensionAnchor.Component], ViewerTypes.LoggedOut, { x: 10, y: 10 }),
+    views: createViewsForTest(2, ExtensionViewType.Component, ViewerTypes.LoggedOut, { x: 10, y: 10 }),
     closeHandler: jest.fn(),
     saveViewHandler: jest.fn(),
   }));

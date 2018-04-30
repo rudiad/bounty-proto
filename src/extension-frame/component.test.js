@@ -126,4 +126,14 @@ describe('<ExtensionFrame />', () => {
       expect(wrapper).toMatchSnapshot();
     });
   });
+
+  describe('when in mobile view mode', () => {
+    it('renders correctly', () => {
+      const { wrapper } = setupShallow({
+        type: ExtensionViewType.Mobile,
+        mode: ExtensionMode.Viewer,
+      });
+      expect(wrapper).toMatchSnapshot();
+    });
+  });
 });

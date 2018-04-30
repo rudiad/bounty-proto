@@ -5,7 +5,6 @@ import { EXTENSION_VIEWS, BROADCASTER_CONFIG, LIVE_CONFIG } from '../constants/n
 import { Rig } from './component';
 import { ExtensionAnchors } from '../constants/extension-types';
 import { ViewerTypes } from '../constants/viewer-types';
-import { IdentityOptions } from '../constants/identity-options';
 const { ExtensionMode, ExtensionAnchor } = window['extension-coordinator'];
 
 describe('<Rig />', () => {
@@ -78,7 +77,7 @@ describe('<Rig />', () => {
     expect(wrapper.instance().state.showEditView).toBe(true);
     expect(wrapper.instance().state.idToEdit).toBe('1');
 
-    wrapper.instance().editComponentViewPosition({ x: 25, y: 25 });
+    wrapper.instance().editViewHandler({ x: 25, y: 25 });
 
     const views = wrapper.instance()._getExtensionViews();
     const editedView = views.filter(element => element.id === '1');

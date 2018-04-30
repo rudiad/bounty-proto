@@ -8,15 +8,9 @@ const IFRAME_CLASS = 'extension-frame';
 const EXTENSION_FRAME_INIT_ACTION = 'extension-frame-init';
 
 export class ExtensionFrame extends Component {
-  constructor() {
-    super(...arguments);
-    this._boundOnFrameDoubleClick = this._onFrameDoubleClick.bind(this);
-  }
-
   componentDidMount() {
     if (this.iframe) {
       this.iframe.onload = this._extensionFrameInit;
-      this.iframe.contentWindow.addEventListener('dblclick', this._boundOnFrameDoubleClick);
     }
   }
 
@@ -57,7 +51,6 @@ export class ExtensionFrame extends Component {
   _onIdentityLinked(isLinked) {}
 
   _onFrameDoubleClick(evt) {
-    console.log('double clickin')
     evt.preventDefault();
   }
 
