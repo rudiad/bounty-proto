@@ -9,7 +9,7 @@ import { ViewTypeImages } from '../constants/img-map';
 import { RadioOption } from './radio-option';
 import { DivOption } from './div-option';
 import closeButton from '../img/close_icon.png';
-import { MobileOrientation, DefaultMobileOrientation } from '../constants/mobile';
+import { MobileOrientation, DefaultMobileOrientation, MobileSizes } from '../constants/mobile';
 const { ExtensionAnchor, ExtensionPlatform } = window['extension-coordinator'];
 
 export class ExtensionViewDialog extends Component {
@@ -61,6 +61,12 @@ export class ExtensionViewDialog extends Component {
 
   renderFrameSizeComponents() {
     return Object.keys(OverlaySizes).map(key => {
+      return <RadioOption key={key} name="frameSize" value={key} onChange={this.onChange} checked={key === this.state.frameSize}/>
+    });
+  }
+
+  renderMobileFrameSizeComponents() {
+    return Object.keys(MobileSizes).map(key => {
       return <RadioOption key={key} name="frameSize" value={key} onChange={this.onChange} checked={key === this.state.frameSize}/>
     });
   }
@@ -155,7 +161,7 @@ export class ExtensionViewDialog extends Component {
                     </div>
                     <div className='size-subcontainer__presets-container'>
                       <div className='size-subcontainer__size-selection'>
-                        {this.renderFrameSizeComponents()}
+                        {this.renderMobileFrameSizeComponents()}
                       </div>
                       <div className='overlay-custom-container'>
                           <RadioOption className='overlay-custom' name="frameSize" value="Custom" onChange={this.onChange} checked={"Custom" === DEFAULT_IDENTITY_OPTION} />
