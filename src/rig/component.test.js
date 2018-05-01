@@ -5,7 +5,8 @@ import { EXTENSION_VIEWS, BROADCASTER_CONFIG, LIVE_CONFIG } from '../constants/n
 import { Rig } from './component';
 import { ExtensionAnchors } from '../constants/extension-types';
 import { ViewerTypes } from '../constants/viewer-types';
-const { ExtensionMode, ExtensionAnchor } = window['extension-coordinator'];
+import { MobileSizes } from '../constants/mobile';
+const { ExtensionMode, ExtensionAnchor, ExtensionViewType } = window['extension-coordinator'];
 
 describe('<Rig />', () => {
   const setupShallow = setupShallowTest(Rig, () => { });
@@ -173,4 +174,78 @@ describe('<Rig />', () => {
     wrapper.instance()._onConfigurationError(testError);
     expect(wrapper.instance().state.error).toBe(testError);
   });
+
+  describe('gets frame size from dialog ref correctly', () => {
+
+// _getFrameSizeFromDialog(dialogRef) {
+//   if (dialogRef.state.frameSize === 'Custom') {
+//     return {
+//       width: dialogRef.state.width,
+//       height: dialogRef.state.height
+//     };
+//   }
+//   if (dialogRef.state.extensionViewType === ExtensionViewType.Mobile) {
+//     return MobileSizes[dialogRef.state.frameSize];
+//   }
+
+//   return OverlaySizes[dialogRef.state.frameSize];
+// }
+
+  it('returns correct data for mobile ', () => {
+    const { wrapper } = setupShallow();
+    const testDialogRef = {
+      state: {
+        width: 0,
+        height: 0,
+        frameSize: 'iPhone X (375x822)',
+        extensionViewType: ExtensionViewType.Mobile
+      }
+    };
+    const expectedMobileFrameSize = {
+      width: 375,
+      height: 822,
+    };
+    let frameSize = wrapper.instance()._getFrameSizeFromDialog(testDialogRef);
+    expect(frameSize).toEqual(expectedMobileFrameSize);
+  });
+
+  it('returns correct data for other types', () => {
+    const { wrapper } = setupShallow();
+    const overlayTestDialogRef = {
+      state: {
+        width: 0,
+        height: 0,
+        frameSize: '640x480',
+        extensionViewType: ExtensionViewType.Overlay
+      }
+    }
+    const expectedOverlayFrameSize = {
+      width: 640,
+      height: 480,
+    }
+    const frameSize = wrapper.instance()._getFrameSizeFromDialog(overlayTestDialogRef);
+    expect(frameSize).toEqual(expectedOverlayFrameSize);
+  });
+
+
+  it('returns correct data for custom size', () => {
+    const { wrapper } = setupShallow();
+    const overlayTestDialogRef = {
+      state: {
+        width: 100,
+        height: 100,
+        frameSize: 'Custom',
+        extensionViewType: ExtensionViewType.Overlay
+      }
+    }
+    const expectedOverlayFrameSize = {
+      width: 100,
+      height: 100,
+    }
+    const frameSize = wrapper.instance()._getFrameSizeFromDialog(overlayTestDialogRef);
+    expect(frameSize).toEqual(expectedOverlayFrameSize);
+  });
+
+
+  })
 });
