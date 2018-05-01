@@ -3,6 +3,7 @@ import { ExtensionViewDialog } from './component';
 import { DEFAULT_EXTENSION_TYPE } from '../constants/extension-types.js'
 import { DEFAULT_OVERLAY_SIZE } from '../constants/overlay-sizes.js'
 import { ViewerTypes, DEFAULT_VIEWER_TYPE } from '../constants/viewer-types.js'
+const { ExtensionViewType } = window['extension-coordinator'];
 
 describe('<ExtensionViewDialog />', () => {
   const setupShallow = setupShallowTest(ExtensionViewDialog, () => ({
@@ -38,6 +39,13 @@ describe('<ExtensionViewDialog />', () => {
       show: false
     });
     expect(wrapper.type()).toBe(null);
+  });
+
+  it('shows nothing if no supported views', () => {
+    const { wrapper } = setupShallow({
+      extensionViews: {}
+    })
+    expect(wrapper).toMatchSnapshot();
   });
 
   it('renders correct identity options when logged in user type is selected', () => {
@@ -102,6 +110,62 @@ describe('<ExtensionViewDialog />', () => {
 
     it('has the correct selected UI elements', () => {
       expect(wrapper.find('DivOption[value="panel"][checked=true]')).toHaveLength(1);
+      expect(wrapper.find('DivOption[checked=false]')).toHaveLength(0);
+
+      expect(wrapper.find('RadioOption[value="Broadcaster"][checked=true]')).toHaveLength(1);
+      expect(wrapper.find('RadioOption[name="viewerType"][checked=false]')).toHaveLength(2);
+
+      expect(wrapper.find('RadioOption[name="identityOption"]')).toHaveLength(0);
+    });
+  });
+
+
+  describe('for an extension that only supports components', () => {
+    const { wrapper } = setupShallow({
+      extensionViews: {
+        component: {}
+      }
+    });
+    it('renders correctly', () => {
+      expect(wrapper).toMatchSnapshot();
+    });
+
+    it('has the correct default state', () => {
+      expect(wrapper.state('extensionViewType')).toBe(ExtensionViewType.Component);
+      expect(wrapper.state('frameSize')).toBe(DEFAULT_OVERLAY_SIZE);
+      expect(wrapper.state('viewerType')).toBe(DEFAULT_VIEWER_TYPE);
+    });
+
+    it('has the correct selected UI elements', () => {
+      expect(wrapper.find('DivOption[value="component"][checked=true]')).toHaveLength(1);
+      expect(wrapper.find('DivOption[checked=false]')).toHaveLength(0);
+
+      expect(wrapper.find('RadioOption[value="Broadcaster"][checked=true]')).toHaveLength(1);
+      expect(wrapper.find('RadioOption[name="viewerType"][checked=false]')).toHaveLength(2);
+
+      expect(wrapper.find('RadioOption[name="identityOption"]')).toHaveLength(0);
+    });
+  });
+
+
+  describe('for an extension that only supports mobile', () => {
+    const { wrapper } = setupShallow({
+      extensionViews: {
+        mobile: {},
+      }
+    });
+    it('renders correctly', () => {
+      expect(wrapper).toMatchSnapshot();
+    });
+
+    it('has the correct default state', () => {
+      expect(wrapper.state('extensionViewType')).toBe(ExtensionViewType.Mobile);
+      expect(wrapper.state('frameSize')).toBe(DEFAULT_OVERLAY_SIZE);
+      expect(wrapper.state('viewerType')).toBe(DEFAULT_VIEWER_TYPE);
+    });
+
+    it('has the correct selected UI elements', () => {
+      expect(wrapper.find('DivOption[value="mobile"][checked=true]')).toHaveLength(1);
       expect(wrapper.find('DivOption[checked=false]')).toHaveLength(0);
 
       expect(wrapper.find('RadioOption[value="Broadcaster"][checked=true]')).toHaveLength(1);
